@@ -1,11 +1,22 @@
+using Employee.DAL.FluentValidators;
+using Employee.DAL.Handlers;
+using Employee.DAL.Services;
+using FluentValidation;
+using MediatR;
+using Employee.DAL;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMediatR(typeof(EmployeeLibrary).Assembly);
+builder.Services.AddValidatorsFromAssemblyContaining<AddEmployeeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateEmployeeValidator>();
+builder.Services.AddScoped<DbContext>();
+builder.Services.AddScoped<ILoggerService, FileLoggerService>();
 
 var app = builder.Build();
 
